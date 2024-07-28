@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> StoryWeaver : A story telling chatbot </title>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 50px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            background: #e2e8f0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 12px;
+            max-width: 75%;
+            word-wrap: break-word;
+            font-size: 16px;
+            position: relative;
+        }
+
+        .message.user {
+            background-color: #4a90e2;
+            color: #ffffff;
+            align-self: flex-end;
+            border-radius: 12px 12px 0 12px;
+        }
+
+        .message.bot {
+            background-color: #f6c1c1;
+            color: #333;
+            align-self: flex-start;
+            border-radius: 12px 12px 12px 0;
+        }
+
+        .input-container {
+            display: flex;
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffffff;
+            border-top: 1px solid #ddd;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 90px);
+            padding: 15px;
+            border: 2px solid #4a90e2;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        button {
+            width: 80px;
+            padding: 15px;
+            border: none;
+            background: #4a90e2;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #357abd;
+            transform: scale(1.05);
+        }
+    </style>
+
+    
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button id="send-button">Send</button>
+    </div>
+    <script>
+        function appendMessage(content, className) {
+            const chatBox = document.getElementById('chat-box');
+            const message = document.createElement('div');
+            message.className = `message ${className}`;
+            message.textContent = content;
+            chatBox.appendChild(message);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        document.getElementById('send-button').addEventListener('click', function() {
+            const userInput = document.getElementById('user-input').value;
+            if (userInput.trim() !== '') {
+                appendMessage(userInput, 'user');
+
+                // Send user input to Flask backend
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: userInput })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    appendMessage(data.response, 'bot');
+                })
+                .catch(error => console.error('Error:', error));
+
+                // Clear the input field
+                document.getElementById('user-input').value = '';
+            }
+        });
+
+        window.onload = function() {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+    </script>
+</body>
+</html>
