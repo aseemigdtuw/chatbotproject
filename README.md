@@ -6,7 +6,7 @@ Methodologies:
    - The user interface is built using HTML and CSS, featuring a chat container, message display area, and input field. Styling ensures a user-friendly experience, with differentiated message designs for user and bot interactions.
    - JavaScript handles dynamic elements, including message appending, server communication via the fetch API, and input management.
 2. Backend Integration:
-   - The Flask backend processes user inputs sent via HTTP POST requests.
+   - The Flask backend processes user inputs sent via HTTP POST requests. 
 Preprocessing:
 The preprocessing in the storytelling chatbot involves normalizing user input to lowercase for consistency and using regular expressions to match specific keywords. This allows the chatbot to trigger appropriate predefined responses from a dictionary. When a user requests a story, the bot lists available story keywords and waits for the user to specify a choice. It then searches for and selects a matching story from a text file, ensuring relevant and engaging responses. This preprocessing ensures efficient handling of various user inputs and smooth operation of the chatbot.
 Tools and Technologies Used:
